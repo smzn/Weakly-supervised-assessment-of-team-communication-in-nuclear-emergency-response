@@ -1,0 +1,11 @@
+Subcategory,Indicator,Zero rate,Opportunity guard,Absence-LF coverage
+Information sharing,Enumeration,0.683,15 utterances,0.298
+Information sharing,Closing,0.839,27 utterances,0.304
+Information sharing,Conjunction,0.217,none,0.217
+Listening,Backchannel,0.609,14 utterances,0.298
+Listening,Understanding,0.615,15 utterances,0.304
+Confirmation,Confirmation request,0.932,31 utterances,0.298
+Confirmation,Confirmation report,0.739,24 utterances,0.311
+Speaking up,Direct proposal,0.727,21 utterances,0.317
+Speaking up,Hedged assertion,0.839,24 utterances,0.298
+Speaking up,Risk mention,0.671,17 utterances,0.311
