@@ -1,6 +1,6 @@
-# Weakly Supervised Assessment of Team Communication in Nuclear Emergency Response: Evidence from the Fukushima Daiichi Teleconference Records
+# Data
 
-## Directory Structure
+## What is here
 
 ```
 data/
@@ -31,7 +31,7 @@ the analysis scripts need.
 
 Utterances whose `speaker` is `UNKNOWN` are excluded in every analysis script.
 
-## Items Not Included in This Data
+## What is not here
 
 **Audio and video are not included.** The source material is the video-conference
 footage released by the Tokyo Electric Power Company. Obtain it from the publisher and
@@ -57,9 +57,9 @@ reproduces the values reported in the paper exactly.
 
 ---
 
-# 原子力緊急時対応におけるチームコミュニケーションの弱教師あり評価：福島第一原発テレビ会議記録に基づく実証分析
+# データ
 
-## ディレクトリ構成
+## 置いてあるもの
 
 ```
 data/
@@ -73,7 +73,7 @@ data/
 測定値が入っています。分析スクリプトが読むのはこのファイルだけです。列の意味は上の
 英語の表を参照してください。`speaker` が `UNKNOWN` の発話は、どの分析でも除いています。
 
-## 本データに含まないもの
+## 置いていないもの
 
 **音声と映像は含みません。** 元になっているのは東京電力が公開したテレビ会議の録画です。
 公開元から入手し、16 kHz モノラルの WAV を会議ごとに `tv001.wav`〜`tv161.wav` の名前で

@@ -1,4 +1,4 @@
-# Weakly supervised assessment of non-technical skills in nuclear emergency teleconferences
+# Weakly Supervised Assessment of Team Communication in Nuclear Emergency Response: Evidence from the Fukushima Daiichi Teleconference Records
 
 Code and transcript data for the study of 161 video-conference sessions recorded at the
 Tokyo Electric Power Company during the Fukushima Daiichi nuclear accident.
@@ -95,8 +95,7 @@ Values reported in the paper, and reproduced by these scripts:
 
 ## Citation
 
-Ohba, H., Ito, K., & Mizuno, S. Weakly Supervised Assessment of Non-Technical Skills in
-Nuclear Emergency Teleconferences Using Linguistic Features.
+Ohba, H., Ito, K., & Mizuno, S. Weakly Supervised Assessment of Team Communication in Nuclear Emergency Response: Evidence from the Fukushima Daiichi Teleconference Records.
 
 ## License
 
@@ -104,56 +103,54 @@ MIT. See [LICENSE](LICENSE).
 
 ---
 
-# 原子力緊急時テレビ会議における非技術的スキルの弱教師あり評価
+# 原子力緊急時対応におけるチームコミュニケーションの弱教師あり評価：福島第一原発テレビ会議記録に基づく実証分析
 
-福島第一原子力発電所事故の際に東京電力で記録されたテレビ会議 161 件を分析した研究です。
-コードと文字起こしデータを置いています。
+福島第一原子力発電所事故の際に東京電力で記録されたテレビ会議161件を分析した研究です。
+コードと文字起こしデータを公開しています。
 
-人手のラベルは使いません。独立した 2 つのスコアを作り、それらを統合して、会議ごとの
-コミュニケーションの質をスコア化します。
+人手のラベルは使用せず、独立した2つのスコアを作成し、それらを統合して会議ごとのコミュニケーションの質をスコア化します。
 
-| スコア | 何から作るか | 変数名 |
+| スコア | 生成方法 | 変数名 |
 |---|---|---|
 | 言語スコア | 文字起こしから検出した発話行為を Snorkel の LabelModel で重み付け | `y_weak` |
 | 非言語スコア | 発話速度、ピッチの変動、音の大きさ | `y_nonverbal` |
-| weak COMM score | 上記 2 つをナッシュ交渉解の重みで統合 | `y_combined` |
+| weak COMM score | 上記2つをナッシュ交渉解の重みで統合 | `y_combined` |
 
-言語スコアは、情報共有・傾聴・確認・言い出す力という 4 つの下位要素からなります。
-日本語の文字起こしから 10 個の指標を形態素解析で検出し、それぞれをラベリング関数に
-変換します。統合は、下位要素ごとに LabelModel を学習させて行います。
+言語スコアは、「情報共有」「傾聴」「確認」「言い出す力」という4つの下位要素から構成されます。
+日本語の文字起こしから形態素解析により10個の指標を検出し、それぞれをラベリング関数に変換します。統合は、下位要素ごとに LabelModel を学習させて行います。
 
 ## リポジトリの構成
 
-```
+```text
 .
-├── code/                       処理と分析の各段階をスクリプトにしたもの
-│   ├── 01_audio_pipeline.py    1 会議分：規制音除去、VAD、話者分離、音声認識、音響特徴
-│   ├── 02_run_pipeline_batch.py   全会議に対して 01 を実行
-│   ├── 03_build_turns_master.py   会議ごとの出力を 1 つの表にまとめる
-│   ├── 04_nonverbal_scores.py     発話速度・ピッチ変動・音量 → y_nonverbal
-│   ├── 05_language_score.py       ラベリング関数と LabelModel → y_weak
-│   ├── 06_combined_score.py       ナッシュ交渉解 → y_combined
-│   ├── 07_keyword_analysis.py     固有名詞の出現とスコアの関係
-│   └── nts_common.py              ラベリング関数、LabelModel、図表のラベル
-├── data/                       文字起こしと中間データ。詳細は data/README.md
+├── code/                  処理と分析の各段階をスクリプト化したもの
+│   ├── 01_audio_pipeline.py    1会議分：規制音除去、VAD、話者分離、音声認識、音響特徴
+│   ├── 02_run_pipeline_batch.py    全会議に対して 01 を実行
+│   ├── 03_build_turns_master.py    会議ごとの出力を1つの表にまとめる
+│   ├── 04_nonverbal_scores.py      発話速度・ピッチ変動・音量 → y_nonverbal
+│   ├── 05_language_score.py        ラベリング関数と LabelModel → y_weak
+│   ├── 06_combined_score.py        ナッシュ交渉解 → y_combined
+│   ├── 07_keyword_analysis.py      固有名詞の出現とスコアの関係
+│   └── nts_common.py               ラベリング関数、LabelModel、図表のラベル
+├── data/                  文字起こしと中間データ。詳細は data/README.md を参照
 ├── requirements.txt
 └── LICENSE
 ```
 
-音声と映像はこのリポジトリに含みません。01〜03 は文字起こしの作り方を示すものです。
-論文の結果は、文字起こしがあれば 04〜07 だけで再現できます。
+音声と映像のデータはこのリポジトリには含まれません。`01`〜`03` は文字起こしの生成手順を示すものです。
+論文の結果は、文字起こしデータがあれば `04`〜`07` のスクリプトのみで再現できます。
 
 ## インストール
 
-Python 3.10 を使います。
+Python 3.10 を使用します。
 
 ```bash
 pip install -r requirements.txt
 ```
 
-分析の再現に必要なのは `requirements.txt` の前半だけです。後半の音声系
-（faster-whisper、pyannote.audio、torch など）が要るのは、録画から文字起こしを
-作り直すときだけです。
+分析の再現に必要なのは `requirements.txt` の前半部分のみです。後半の音声処理関連パッケージ
+（faster-whisper、pyannote.audio、torch など）が必要になるのは、録画データから文字起こしを
+作り直す場合のみです。
 
 ## 結果の再現
 
@@ -165,41 +162,40 @@ python 06_combined_score.py --lang ja
 python 07_keyword_analysis.py --lang ja
 ```
 
-図と表は `results/` に出力されます。`--lang ja` は図表のラベルを日本語にする指定で、
-`japanize-matplotlib` が必要です。`--lang en` にすると英語のラベルになります。
+図表は `results/` ディレクトリに出力されます。`--lang ja` は図表のラベルを日本語にするための指定で、
+`japanize-matplotlib` が必要です。`--lang en` を指定すると英語のラベルになります。
 
-論文に記載した値のうち、これらのスクリプトで再現できるものは次のとおりです。
+論文に記載した数値のうち、これらのスクリプトで再現できるものは以下の通りです。
 
 | 項目 | 値 |
 |---|---|
-| 分析対象の会議数 | 161 件 |
-| 言語スコアと非言語スコアの相関 | r = 0.049（p = 0.54） |
-| ナッシュ交渉解の重み | α = 0.518、β = 0.482（標準化すると厳密に 0.500） |
-| 下位要素を 1 つずつ除いたアブレーションの幅 | 0.049 |
-| 4 下位要素間の Spearman 相関 | 平均 0.118、最大 0.247 |
-| 発話数を揃えた固有名詞の検定 | q < .05 は 75 セル中 0、補正前 p < .05 は 6 |
+| 分析対象の会議数 | 161件 |
+| 言語スコアと非言語スコアの相関 | $r = 0.049$ ($p = 0.54$) |
+| ナッシュ交渉解の重み | $\alpha = 0.518$、$\beta = 0.482$（標準化すると厳密に 0.500） |
+| 下位要素を1つずつ除いたアブレーションの幅 | 0.049 |
+| 4つの下位要素間の Spearman 相関 | 平均 0.118、最大 0.247 |
+| 発話数を揃えた固有名詞の検定 | $q < .05$ は 75 セル中 0、補正前 $p < .05$ は 6 |
 
 ## 手法上の注意点
 
-- **機会ガード**：多くの指標は、ほとんどの会議で出現しません。会議が短く、その行動が
-  現れる機会自体がなかった場合が多いためです。そこで「出現しなかったこと」を根拠と
-  するのは、発話数が一定以上あった会議に限りました。閾値は、不在のラベリング関数が
-  判定する会議が全体の 30% を超えないように決めています。
-- **下位要素ごとの LabelModel**：本コーパスでは 4 つの下位要素がほぼ独立しているため、
-  すべてのラベリング関数を 1 つの LabelModel に入れると、内部一貫性が最も高い要素に
-  スコアが引きずられます。下位要素ごとに学習させ、4 つのスコアを等重みで平均します。
-- **沈黙はスコアに含めない**：パイプラインは WebRTC VAD で沈黙比率を算出しますが、
-  常時接続で行われる会議では、沈黙をそのままコミュニケーションの不全とは読めません。
-  値は記録するだけで、スコアには使っていません。
-- **ピッチと音量はコーパス内のパーセンタイル**：ピッチは話者ごとの差が大きく、録音条件も
-  揃っていません。文献の絶対値はそのまま持ち込めないと判断しました。絶対値が使える
-  発話速度についてのみ、文献の基準値を閾値としています。
+- **機会ガード**：多くの指標は、大半の会議でほとんど出現しません。会議が短く、その行動が
+  現れる機会自体がなかった場合が多いためです。そのため、「出現しなかったこと」を根拠とするのは
+  発話数が一定以上あった会議に限定しました。閾値は、不在のラベリング関数が
+  判定する会議が全体の 30% を超えないように設定しています。
+- **下位要素ごとの LabelModel**：本コーパスでは4つの下位要素がほぼ独立しているため、
+  すべてのラベリング関数を1つの LabelModel に統合すると、内部一貫性が最も高い要素に
+  スコアが引きずられます。そのため、下位要素ごとに学習させ、4つのスコアを等重みで平均しています。
+- **沈黙はスコアに含めない**：パイプラインでは WebRTC VAD により沈黙比率を算出していますが、
+  常時接続で行われる会議において、沈黙を直ちにコミュニケーションの不全とみなすことはできません。
+  そのため値の記録にとどめ、スコアには使用していません。
+- **ピッチと音量はコーパス内のパーセンタイル**：ピッチは話者ごとの個人差が大きく、録音条件も
+  均一ではないため、既存文献の絶対値をそのまま適用することは困難と判断しました。
+  絶対値の利用が可能な発話速度についてのみ、文献の基準値を閾値として採用しています。
 
 ## 引用
 
-Ohba, H., Ito, K., & Mizuno, S. Weakly Supervised Assessment of Non-Technical Skills in
-Nuclear Emergency Teleconferences Using Linguistic Features.
+Ohba, H., Ito, K., & Mizuno, S. Weakly Supervised Assessment of Team Communication in Nuclear Emergency Response: Evidence from the Fukushima Daiichi Teleconference Records.
 
 ## ライセンス
 
-MIT ライセンスです。[LICENSE](LICENSE) を参照してください。
+本リポジトリは MIT ライセンスの下で公開されています。詳細は [LICENSE](LICENSE) を参照してください。
